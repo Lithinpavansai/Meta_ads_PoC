@@ -1,98 +1,100 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React from 'react';
+import { FlatList, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+export type Lead = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  submittedAt: string;
+};
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+const DUMMY_LEADS: Lead[] = [
+  {
+    id: '1',
+    name: 'Sarah Connor',
+    email: 'sarah.connor@example.com',
+    phone: '+1 (555) 019-2834',
+    submittedAt: '2026-09-27 14:32',
+  },
+  {
+    id: '2',
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    phone: '+1 (555) 012-7489',
+    submittedAt: '2026-09-27 16:05',
+  },
+];
+
+export default function LeadsScreen() {
+  const renderItem = ({ item }: { item: Lead }) => (
+    <View style={styles.card}>
+      <Text style={styles.leadName}>{item.name}</Text>
+      <Text style={styles.leadDetail}>{item.email}</Text>
+      <Text style={styles.leadDetail}>{item.phone}</Text>
+      <Text style={styles.leadTimestamp}>Submitted: {item.submittedAt}</Text>
+    </View>
   );
-}
 
-export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#000000" />
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Leads</Text>
+      </View>
+      <FlatList
+        data={DUMMY_LEADS}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: '#000000',
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1F1F1F',
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
-  title: {
-    textAlign: 'center',
+  listContent: {
+    padding: 20,
+    gap: 12,
   },
-  code: {
-    textTransform: 'uppercase',
+  card: {
+    backgroundColor: '#121212',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#262626',
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  leadName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 6,
+  },
+  leadDetail: {
+    fontSize: 14,
+    color: '#B3B3B3',
+    marginBottom: 4,
+  },
+  leadTimestamp: {
+    fontSize: 12,
+    color: '#737373',
+    marginTop: 6,
   },
 });
