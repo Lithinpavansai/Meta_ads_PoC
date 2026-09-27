@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.local
+.env.*.local
+__pycache__/
+*.pyc
+.expo/
+.expo-shared/
+dist/
+build/
+.DS_Store
+*.log
+serviceAccountKey.json
+firebase-adminsdk-*.json
+EOF
