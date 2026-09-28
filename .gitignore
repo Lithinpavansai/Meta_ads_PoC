@@ -2,6 +2,7 @@ node_modules/
 .env
 .env.local
 .env.*.local
+backend/.env
 __pycache__/
 *.pyc
 .expo/
@@ -12,4 +13,3 @@ build/
 *.log
 serviceAccountKey.json
 firebase-adminsdk-*.json
-EOF
